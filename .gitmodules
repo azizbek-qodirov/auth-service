@@ -1,0 +1,3 @@
+[submodule "RestaurantRservationSubmodule"]
+	path = RestaurantRservationSubmodule
+	url = git@github.com:mirjalilova/RestaurantRservationSubmodule.git

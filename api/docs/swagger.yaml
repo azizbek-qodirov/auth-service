@@ -1,0 +1,154 @@
+basePath: /v1
+definitions:
+  handler.UserReq:
+    properties:
+      age:
+        type: integer
+      name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  models.LoginReq:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  models.UserReq:
+    properties:
+      age:
+        type: integer
+      name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  token.Tokens:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    type: object
+info:
+  contact: {}
+  title: N10 group swagger UI
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: This api registers user
+      parameters:
+      - description: LoginReq
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginReq'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/token.Tokens'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Login USER
+      tags:
+      - USER
+  /register/user:
+    post:
+      consumes:
+      - application/json
+      description: This api registers user
+      parameters:
+      - description: UserReq
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/handler.UserReq'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.UserReq'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: REGISTER USER
+      tags:
+      - USER
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: This api GETS user by id
+      parameters:
+      - description: ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserReq'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: GET USER
+      tags:
+      - USER
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: This api GETS allusers
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserReq'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: GET USERS
+      tags:
+      - USER
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
