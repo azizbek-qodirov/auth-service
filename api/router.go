@@ -10,9 +10,9 @@ import (
 
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	_ "api-gateway/api/docs"
-	"api-gateway/api/handler"
-	"api-gateway/api/middleware"
+	_ "auth-service/api/docs"
+	"auth-service/api/handlers"
+	"auth-service/api/middleware"
 )
 
 // @Title N10 group swagger UI
@@ -20,7 +20,7 @@ import (
 // @securityDefinitions.apikey BearerAuth
 // @in header
 // @name Authorization
-func Router(userHandler *handler.Handler) *gin.Engine {
+func NewRouter(userHandler *handlers.HTTPHandler) *gin.Engine {
 	router := gin.Default()
 
 	corsConfig := cors.Config{

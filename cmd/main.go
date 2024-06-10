@@ -1,24 +1,33 @@
 package main
 
 import (
-	r "api-gateway/api"
-	h "api-gateway/api/handler"
+	"auth-service/api"
+	"auth-service/api/handlers"
+	"auth-service/config"
+	"auth-service/config/logger"
+	"auth-service/postgresql"
+	"auth-service/service"
+	"path/filepath"
+	"runtime"
+)
 
-	"api-gateway/service"
-	"log"
+var (
+	_, b, _, _ = runtime.Caller(0)
+	basepath   = filepath.Dir(b)
 )
 
 func main() {
+	cf := config.Load()
+	logger := logger.NewLogger(basepath, cf.LOG_PATH)
+	em := config.NewErrorManager(logger)
 
-	userService := service.UserService{}
+	conn, err := postgresql.ConnectDB(&cf)
+	em.CheckErr(err)
+	defer conn.Close()
 
-	userHandler := h.NewHandler(&userService)
+	us := service.NewUserService()
 
-	router := r.Router(userHandler)
-
-	log.Println("api-gateway run in :7070 ")
-	if err := router.Run(":7071"); err != nil {
-		log.Fatal(err)
-	}
+	handler := handlers.NewHandler()
+	api.NewRouter()
 
 }

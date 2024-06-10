@@ -1,7 +1,7 @@
 package service
 
 import (
-	m "api-gateway/models"
+	pb "auth-service/RestaurantRservationSubmodule/genprotos"
 	"fmt"
 	"log"
 	"net/rpc"
@@ -9,11 +9,15 @@ import (
 
 type UserService struct {
 	Client *rpc.Client
+	pb.UnimplementedAuthServiceServer
 }
 
-func (u *UserService) Register(req *m.UserReq) (*m.UserRes, error) {
+func NewUserService(client *rpc.Client) *UserService {
+	return &UserService{Client: client}
+}
 
-	res := m.UserRes{}
+func (u *UserService) Register(req *pb.RegisterReq) (*pb.RegisterResp, error) {
+	res := &pb.RegisterResp{}
 
 	err := u.Client.Call("User.Register", req, &res)
 
@@ -22,9 +26,7 @@ func (u *UserService) Register(req *m.UserReq) (*m.UserRes, error) {
 		return nil, err
 	}
 
-	fmt.Println("User Registerd : ", res)
-
-	return &res, nil
+	return res, nil
 
 }
 

@@ -1,8 +1,7 @@
-package handler
+package handlers
 
 import (
 	t "api-gateway/api/token"
-	"api-gateway/models"
 	"api-gateway/service"
 	s "api-gateway/storage"
 	"log"
@@ -12,12 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Handler struct {
-}
 
-func NewHandler(userService *service.UserService) *Handler {
-	return &Handler{}
-}
 
 type UserReq struct {
 	Name     string `json:"name"`
