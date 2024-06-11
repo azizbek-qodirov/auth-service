@@ -7,12 +7,8 @@ type RegisterReq struct {
 	Password string `json:"password"` // User's password
 }
 
-type RegisterResp struct {
-	Message string `json:"message"` // Message indicating successful registration
-}
-
 type LoginReq struct {
-	Username string `json:"username"` // User's username
+	Email    string `json:"username"` // User's username
 	Password string `json:"password"` // User's password
 }
 

@@ -14,11 +14,13 @@ import (
 	"auth-service/api/middleware"
 )
 
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func NewRouter(h *handlers.HTTPHandler) *gin.Engine {
 	router := gin.Default()
 
-	url := ginSwagger.URL("swagger/doc.json")
-	router.GET("swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
+	router.GET("/api/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	router.POST("/register", h.Register)
 	router.POST("/login", h.Login)

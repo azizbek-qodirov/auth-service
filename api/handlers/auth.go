@@ -1,29 +1,38 @@
 package handlers
 
 import (
-	"auth-service/token"
+	"auth-service/api/token"
+	"auth-service/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
+	_ "github.com/swaggo/swag"
 	"golang.org/x/crypto/bcrypt"
 )
 
+// Register godoc
+// @Summary Register a new user
+// @Description Register a new user with email, username, and password
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param user body models.RegisterReq true "User registration request"
+// @Success 201 {object} models.RegisterReq
+// @Failure 400 {object} string "Invalid request payload"
+// @Failure 500 {object} string "Server error"
+// @Router /register [post]
 func (h *HTTPHandler) Register(c *gin.Context) {
-	var req struct {
-		Username string `json:"username" binding:"required"`
-		Email    string `json:"email" binding:"required,email"`
-		Password string `json:"password" binding:"required"`
-	}
+	var req models.RegisterReq
 
 	if err := c.BindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})
 		return
 	}
 
-	// Check if email exists
 	exists, err := h.US.EmailExists(req.Email)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Server error"})
+		c.JSON(http.StatusInternalServerError, gin.H{"Server error": err.Error()})
 		return
 	}
 
@@ -32,35 +41,42 @@ func (h *HTTPHandler) Register(c *gin.Context) {
 		return
 	}
 
-	// Hash the password
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Server error"})
+		c.JSON(http.StatusInternalServerError, gin.H{"Server error": err.Error()})
 		return
 	}
+	req.Password = string(hashedPassword)
 
-	// Create the user
-	user, err := h.US.CreateUser(req.Username, req.Email, string(hashedPassword))
+	err = h.US.Register(&req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Server error"})
+		c.JSON(http.StatusInternalServerError, gin.H{"Server error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusCreated, user)
+	c.JSON(http.StatusCreated, req)
 }
 
+// Login godoc
+// @Summary Login a user
+// @Description Authenticate user with email and password
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param credentials body models.LoginReq true "User login credentials"
+// @Success 200 {object} token.Tokens
+// @Failure 400 {object} string "Invalid request payload"
+// @Failure 401 {object} string "Invalid email or password"
+// @Router /login [post]
 func (h *HTTPHandler) Login(c *gin.Context) {
-	var req struct {
-		Email    string `json:"email" binding:"required,email"`
-		Password string `json:"password" binding:"required"`
-	}
+	var req models.LoginReq
 
 	if err := c.BindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})
 		return
 	}
 
-	user, err := h.US.GetUserByEmail(req.Email)
+	user, err := h.US.GetProfile(&models.GetProfileReq{Email: req.Email})
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
 		return
@@ -71,27 +87,32 @@ func (h *HTTPHandler) Login(c *gin.Context) {
 		return
 	}
 
-	tokens := token.GenerateJWTToken(int(user.ID), user.Role, user.Username)
+	tokens := token.GenerateJWTToken(user.ID, user.Email, user.Password)
 
 	c.JSON(http.StatusOK, tokens)
 }
 
 // GetProfile godoc
-// @ID getprofile
-// @Router /profile [GET]
-// @Summary Get Profile
-// @Description Get Profile
-// @Tags party
+// @Summary Get user profile
+// @Description Get the profile of the authenticated user
+// @Tags user
 // @Accept json
 // @Produce json
-// @Param id path string true "party ID"
-// @Success 200 {object} pb.PartyGetById "party data"
-// @Failure 400 {object} string "Bad Request"
-// @Failure 404 {object} string "party not found"
+// @Success 200 {object} models.GetProfileResp
+// @Failure 401 {object} string "Unauthorized"
+// @Failure 404 {object} string "User not found"
 // @Failure 500 {object} string "Server error"
+// @Security BearerAuth
+// @Router /profile [get]
 func (h *HTTPHandler) Profile(c *gin.Context) {
-	userID := c.Param("id")
-	user, err := h.US.GetUserByID(userID)
+	claims, exists := c.Get("claims")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	email := claims.(jwt.MapClaims)["email"].(string)
+	user, err := h.US.GetProfile(&models.GetProfileReq{Email: email})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Server error"})
 		return

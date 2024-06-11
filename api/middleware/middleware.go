@@ -18,13 +18,14 @@ func JWTMiddleware() gin.HandlerFunc {
 		}
 
 		tokenStr := strings.TrimSpace(strings.Replace(authHeader, "Bearer", "", 1))
-		isValid, err := token.ValidateToken(tokenStr)
-		if err != nil || !isValid {
+		claims, err := token.ExtractClaim(tokenStr)
+		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
 			c.Abort()
 			return
 		}
 
+		c.Set("claims", claims)
 		c.Next()
 	}
 }
