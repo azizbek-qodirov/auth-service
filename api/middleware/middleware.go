@@ -1,10 +1,9 @@
 package middleware
 
 import (
+	t "auth-service/api/token"
 	"net/http"
 	"strings"
-
-	t "api-gateway/api/token"
 
 	"github.com/gin-gonic/gin"
 )

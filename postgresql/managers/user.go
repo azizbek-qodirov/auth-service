@@ -1,7 +1,7 @@
 package managers
 
 import (
-	"auth-service/RestaurantRservationSubmodule/genprotos"
+	"auth-service/models"
 	"database/sql"
 )
 
@@ -13,14 +13,14 @@ func NewUserManager(db *sql.DB) *UserManager {
 	return &UserManager{Conn: db}
 }
 
-func (m *UserManager) Register(req genprotos.RegisterReq) (*genprotos.RegisterResp, error) {
-	
+func (m *UserManager) Register(req models.RegisterReq) (*models.RegisterResp, error) {
+	return nil, nil
 }
 
-func (m *UserManager) Login(req genprotos.LoginReq) (*genprotos.LoginResp, error) {
-
+func (m *UserManager) Login(req models.LoginReq) (*models.LoginResp, error) {
+	return nil, nil
 }
 
-func (m *UserManager) Profile(req genprotos.GetProfileReq) (*genprotos.GetProfileResp, error) {
-
+func (m *UserManager) Profile(req models.GetProfileReq) (*models.GetProfileResp, error) {
+	return nil, nil
 }

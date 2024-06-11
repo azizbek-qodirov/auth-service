@@ -1,7 +1,7 @@
 package service
 
 import (
-	pb "auth-service/RestaurantRservationSubmodule/genprotos"
+	"auth-service/models"
 	"auth-service/postgresql/managers"
 	"database/sql"
 )
@@ -14,15 +14,15 @@ func NewUserService(conn *sql.DB) *UserService {
 	return &UserService{UM: *managers.NewUserManager(conn)}
 }
 
-func (u *UserService) Register(req *pb.RegisterReq) (*pb.RegisterResp, error) {
+func (u *UserService) Register(req *models.RegisterReq) (*models.RegisterResp, error) {
 	return nil, nil
 }
 
-func (u *UserService) GetUser(id int) (*m.UserRes, error) {
-	return nil, nil
-}
-
-func (u *UserService) Login(req *m.LoginReq) bool {
+func (u *UserService) Login(req *models.LoginReq) bool {
 	return false
 
+}
+
+func (u *UserService) GetProfile(req *models.GetProfileReq) (*models.GetProfileResp, error) {
+	return nil, nil
 }

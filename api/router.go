@@ -15,13 +15,11 @@ import (
 	"auth-service/api/middleware"
 )
 
-// @Title N10 group swagger UI
-// @BasePath /v1
-// @securityDefinitions.apikey BearerAuth
-// @in header
-// @name Authorization
-func NewRouter(userHandler *handlers.HTTPHandler) *gin.Engine {
+func NewRouter(h *handlers.HTTPHandler) *gin.Engine {
 	router := gin.Default()
+
+	url := ginSwagger.URL("swagger/doc.json")
+	router.GET("swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 
 	corsConfig := cors.Config{
 		AllowOrigins:     []string{"http://localhost", "http://localhost:7070"},
@@ -33,11 +31,10 @@ func NewRouter(userHandler *handlers.HTTPHandler) *gin.Engine {
 
 	router.Use(middleware.Middleware())
 	api := router.Group("/v1")
-	api.POST("/register/user", userHandler.Register)
-	api.POST("/login", userHandler.Login)
-	api.GET("/user", userHandler.GetUser)
-	api.GET("/users", userHandler.GetUsers)
-	url := ginSwagger.URL("swagger/doc.json")
-	api.GET("swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
+	api.POST("/register/user", h.Register)
+	api.POST("/login", h.Login)
+	api.GET("/user", h.GetUser)
+	api.GET("/users", h.GetUsers)
+
 	return router
 }
