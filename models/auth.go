@@ -8,7 +8,7 @@ type RegisterReq struct {
 }
 
 type LoginReq struct {
-	Email    string `json:"username"` // User's username
+	Email    string `json:"email"`    // User's email
 	Password string `json:"password"` // User's password
 }
 
@@ -17,7 +17,7 @@ type LoginResp struct {
 }
 
 type GetProfileReq struct {
-	Email string `json:"username"` // Username of the profile to retrieve
+	Email string `json:"email"` // Username of the profile to retrieve
 }
 
 type GetProfileResp struct {

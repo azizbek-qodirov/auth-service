@@ -41,7 +41,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "JWT tokens",
                         "schema": {
                             "$ref": "#/definitions/token.Tokens"
                         }
@@ -133,9 +133,9 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "201": {
-                        "description": "Created",
+                        "description": "JWT tokens",
                         "schema": {
-                            "$ref": "#/definitions/models.RegisterReq"
+                            "$ref": "#/definitions/token.Tokens"
                         }
                     },
                     "400": {
@@ -179,12 +179,12 @@ const docTemplate = `{
         "models.LoginReq": {
             "type": "object",
             "properties": {
-                "password": {
-                    "description": "User's password",
+                "email": {
+                    "description": "User's email",
                     "type": "string"
                 },
-                "username": {
-                    "description": "User's username",
+                "password": {
+                    "description": "User's password",
                     "type": "string"
                 }
             }

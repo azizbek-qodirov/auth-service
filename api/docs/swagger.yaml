@@ -16,11 +16,11 @@ definitions:
     type: object
   models.LoginReq:
     properties:
+      email:
+        description: User's email
+        type: string
       password:
         description: User's password
-        type: string
-      username:
-        description: User's username
         type: string
     type: object
   models.RegisterReq:
@@ -64,7 +64,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: JWT tokens
           schema:
             $ref: '#/definitions/token.Tokens'
         "400":
@@ -123,9 +123,9 @@ paths:
       - application/json
       responses:
         "201":
-          description: Created
+          description: JWT tokens
           schema:
-            $ref: '#/definitions/models.RegisterReq'
+            $ref: '#/definitions/token.Tokens'
         "400":
           description: Invalid request payload
           schema:

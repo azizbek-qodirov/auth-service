@@ -23,14 +23,10 @@ func (m *UserManager) Register(req models.RegisterReq) error {
 	return nil
 }
 
-// func (m *UserManager) Login(req models.LoginReq) (*models.LoginResp, error) {
-
-// }
-
 func (m *UserManager) Profile(req models.GetProfileReq) (*models.GetProfileResp, error) {
-	query := "SELECT id, username, email FROM users WHERE email = $1"
+	query := "SELECT id, username, email, password FROM users WHERE email = $1"
 	user := &models.GetProfileResp{}
-	err := m.Conn.QueryRow(query, req.Email).Scan(&user.ID, &user.Username, &user.Email)
+	err := m.Conn.QueryRow(query, req.Email).Scan(&user.ID, &user.Username, &user.Email, &user.Password)
 	if err != nil {
 		return nil, err
 	}

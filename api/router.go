@@ -26,7 +26,7 @@ func NewRouter(h *handlers.HTTPHandler) *gin.Engine {
 	router.POST("/login", h.Login)
 
 	protected := router.Group("/", middleware.JWTMiddleware())
-	protected.GET("/profile/:id", h.Profile)
+	protected.GET("/profile", h.Profile)
 
 	return router
 }
