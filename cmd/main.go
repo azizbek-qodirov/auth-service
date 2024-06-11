@@ -25,9 +25,7 @@ func main() {
 	em.CheckErr(err)
 	defer conn.Close()
 
-	us := service.NewUserService()
-
-	handler := handlers.NewHandler()
-	api.NewRouter()
+	us := service.NewUserService(conn)
+	
 
 }
