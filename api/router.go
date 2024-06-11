@@ -12,7 +12,6 @@ import (
 
 	_ "auth-service/api/docs"
 	"auth-service/api/handlers"
-	"auth-service/api/middleware"
 )
 
 func NewRouter(h *handlers.HTTPHandler) *gin.Engine {
@@ -29,12 +28,11 @@ func NewRouter(h *handlers.HTTPHandler) *gin.Engine {
 	}
 	router.Use(cors.New(corsConfig))
 
-	router.Use(middleware.Middleware())
+	// router.Use(middleware.Middleware())
 	api := router.Group("/v1")
-	api.POST("/register/user", h.Register)
+	api.POST("/register", h.Register)
 	api.POST("/login", h.Login)
-	api.GET("/user", h.GetUser)
-	api.GET("/users", h.GetUsers)
+	api.GET("/profile", h.Profile)
 
 	return router
 }
