@@ -26,3 +26,13 @@ type GetProfileResp struct {
 	Email    string `json:"email"`    // User's email address
 	Password string `json:"password"` // User's password
 }
+
+type GetProfileByIdReq struct {
+	ID string `json:"id"` // Username of the profile to retrieve
+}
+
+type GetProfileByIdResp struct {
+	ID       string `json:"id"`       // User's unique identifier
+	Username string `json:"username"` // User's username
+	Email    string `json:"email"`    // User's email address
+}

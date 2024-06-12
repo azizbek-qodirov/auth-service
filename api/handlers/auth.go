@@ -55,7 +55,6 @@ func (h *HTTPHandler) Register(c *gin.Context) {
 		return
 	}
 
-	// Generate JWT tokens
 	tokens := token.GenerateJWTToken(req.ID, req.Email, req.Username)
 
 	c.JSON(http.StatusCreated, tokens)
@@ -117,6 +116,22 @@ func (h *HTTPHandler) Profile(c *gin.Context) {
 
 	email := claims.(jwt.MapClaims)["email"].(string)
 	user, err := h.US.GetProfile(&models.GetProfileReq{Email: email})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Server error"})
+		return
+	}
+
+	if user == nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, user)
+}
+
+func (h *HTTPHandler) GetByID(c *gin.Context) {
+	id := &models.GetProfileByIdReq{ID: c.Param("id")}
+	user, err := h.US.GetByID(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Server error"})
 		return
