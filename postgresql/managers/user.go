@@ -24,7 +24,7 @@ func (m *UserManager) Register(req models.RegisterReq) error {
 }
 
 func (m *UserManager) GetByID(req models.GetProfileByIdReq) (*models.GetProfileByIdResp, error) {
-	query := "SELECT id, username, email FROM users WHERE email = $1"
+	query := "SELECT id, username, email FROM users WHERE id = $1"
 	user := &models.GetProfileByIdResp{}
 	err := m.Conn.QueryRow(query, req.ID).Scan(&user.ID, &user.Username, &user.Email)
 	if err != nil {

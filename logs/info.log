@@ -39,3 +39,7 @@
 [INFO]  2024/06/11 16:17:33 main.go:32: Server is running on port  :8088
 [INFO]  2024/06/11 16:20:50 main.go:32: Server is running on port  :8088
 [INFO]  2024/06/11 18:21:34 main.go:32: Server is running on port  :8088
+[INFO]  2024/06/12 18:39:07 main.go:32: Server is running on port  :8088
+[INFO]  2024/06/12 18:39:48 main.go:32: Server is running on port  :8088
+[INFO]  2024/06/12 18:40:05 main.go:32: Server is running on port  :8088
+[INFO]  2024/06/12 18:40:28 main.go:32: Server is running on port  :8088

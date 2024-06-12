@@ -117,7 +117,8 @@ func (h *HTTPHandler) Profile(c *gin.Context) {
 	email := claims.(jwt.MapClaims)["email"].(string)
 	user, err := h.US.GetProfile(&models.GetProfileReq{Email: email})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Server error"})
+		fmt.Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"Server error": err.Error()})
 		return
 	}
 
@@ -133,7 +134,7 @@ func (h *HTTPHandler) GetByID(c *gin.Context) {
 	id := &models.GetProfileByIdReq{ID: c.Param("id")}
 	user, err := h.US.GetByID(id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Server error"})
+		c.JSON(http.StatusInternalServerError, gin.H{"Server error": err.Error()})
 		return
 	}
 
