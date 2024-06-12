@@ -27,7 +27,7 @@ func GenerateJWTToken(userID string, email string, username string) *Tokens {
 	claims["email"] = email
 	claims["username"] = username
 	claims["iat"] = time.Now().Unix()
-	claims["exp"] = time.Now().Add(3 * time.Minute).Unix() // Token expires in 3 minutes
+	claims["exp"] = time.Now().Add(180 * time.Minute).Unix() // Token expires in 3 minutes
 	access, err := accessToken.SignedString([]byte(signingKey))
 	if err != nil {
 		log.Fatal("error while generating access token : ", err)
