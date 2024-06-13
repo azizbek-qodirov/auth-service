@@ -17,12 +17,12 @@ type Logger struct {
 func NewLogger(basepath, path string) *Logger {
 	l := &Logger{}
 
-	fullpath := basepath + "/" + path
-	var file, err = os.OpenFile(fullpath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		panic(err)
-	}
-	multiWriter := io.MultiWriter(file, os.Stdout)
+	// fullpath := basepath + "/" + path
+	// var file, err = os.OpenFile(fullpath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	multiWriter := io.MultiWriter(os.Stdout)
 
 	l.INFO = log.New(multiWriter, "[INFO]  ", log.Lshortfile|log.LstdFlags)
 	l.WARN = log.New(multiWriter, "[WARN]  ", log.Lshortfile|log.LstdFlags)
